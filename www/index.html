@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>POWER APP</title>
+</head>
+
+<style>
+  body {
+    background-color: #f2f2f2;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  h1 {
+    text-align: center;
+    color: #4d4d4d;
+  }
+
+  form {
+    text-align: center;
+  }
+
+  input[type=button] {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 8px;
+  }
+
+  input[type=button]:hover {
+    background-color: #45a049;
+  }
+</style>
+
+<script>
+  current_url = new URL(window.location.href);
+  // target = "http://frigo-full:8001/"
+  target = "http://" + current_url.hostname + ":8001/"
+
+  // Get the current power
+  const request = new Request(target, { method: "GET" });
+  fetch(request).then((response) => {
+    if (response.status === 200) {
+      console.log(response.json());
+    } else {
+      throw new Error("Something went wrong on API server!");
+    }
+  }).then((response) => {
+    console.debug(response);
+    if (response.heater == 0) {
+      document.body.style.backgroundColor = "#f2f2f2";
+    } else {
+      document.body.style.backgroundColor = "#ff6666";
+    }
+  }).catch((error) => {
+    console.error(error);
+  });
+
+
+
+  function setPower(power) {
+    const request = new Request(target, { method: "POST", body: "{\"heater\": " + power + "}" });
+    fetch(request).then((response) => {
+      if (response.status === 200) {
+        console.debug(response.body);
+      } else {
+        throw new Error("Something went wrong on API server!");
+      }
+    }).then((response) => {
+      console.debug(response);
+    }).catch((error) => {
+      console.error(error);
+    });
+  }
+
+</script>
+
+
+<body>
+  <h1>Power Setup <span id="current_power"></span></h1>
+  <form>
+    <input type="button" value="40%" onclick="setPower(40)" style="height:30px;width:90%">
+    <input type="button" value="39%" onclick="setPower(39)" style="height:30px;width:90%">
+    <input type="button" value="38%" onclick="setPower(38)" style="height:30px;width:90%">
+    <input type="button" value="37%" onclick="setPower(37)" style="height:30px;width:90%">
+    <input type="button" value="36%" onclick="setPower(36)" style="height:30px;width:90%">
+    <input type="button" value="35%" onclick="setPower(35)" style="height:30px;width:90%">
+    <input type="button" value="34%" onclick="setPower(34)" style="height:30px;width:90%">
+    <input type="button" value="33%" onclick="setPower(33)" style="height:30px;width:90%">
+    <input type="button" value="32%" onclick="setPower(32)" style="height:30px;width:90%">
+    <input type="button" value="31%" onclick="setPower(31)" style="height:30px;width:90%">
+    <input type="button" value="30%" onclick="setPower(30)" style="height:30px;width:90%">
+    <input type="button" value="29%" onclick="setPower(29)" style="height:30px;width:90%">
+    <input type="button" value="28%" onclick="setPower(28)" style="height:30px;width:90%">
+    <input type="button" value="27%" onclick="setPower(27)" style="height:30px;width:90%">
+    <input type="button" value="26%" onclick="setPower(26)" style="height:30px;width:90%">
+    <input type="button" value="25%" onclick="setPower(25)" style="height:30px;width:90%">
+    <input type="button" value="24%" onclick="setPower(24)" style="height:30px;width:90%">
+    <input type="button" value="23%" onclick="setPower(23)" style="height:30px;width:90%">
+    <input type="button" value="22%" onclick="setPower(22)" style="height:30px;width:90%">
+    <input type="button" value="21%" onclick="setPower(21)" style="height:30px;width:90%">
+    <input type="button" value="20%" onclick="setPower(20)" style="height:30px;width:90%">
+    <input type="button" value="OFF" onclick="setPower(0)" style="height:30px;width:90%">
+  </form>
+</body>
+
+</html>

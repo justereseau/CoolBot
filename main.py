@@ -8,7 +8,7 @@ import subprocess
 
 
 HEATER_PIN = 13
-HEATER_INITIAL_VALUE = 0
+HEATER_INITIAL_VALUE = 20
 
 global sensor_values
 sensor_values = {}
@@ -28,14 +28,20 @@ class MyServer(BaseHTTPRequestHandler):
         }
         self.send_response(200)
         self.send_header("Content-type", "text/html")
+        self.send_header("Access-Control-Allow-Origin", "http://frigo-full.coloc.djls.space:8080")
         self.end_headers()
         self.wfile.write(bytes(str(data), "utf-8"))
+
+        # else:
+        #     print(self.headers["Content-Type"])
 
     def do_POST(self):
         # Get the POST data as string
         post_data = self.rfile.read(int(self.headers['Content-Length']))
         data = simplejson.loads(post_data)
 
+        response = "Bad parameters"
+        
         # Filter the data
         if "heater" in data:
             max_value = 100
@@ -52,6 +58,7 @@ class MyServer(BaseHTTPRequestHandler):
 
         self.send_response(200)
         self.send_header("Content-type", "text/html")
+        self.send_header("Access-Control-Allow-Origin", "http://frigo-full.coloc.djls.space:8080")
         self.end_headers()
         self.wfile.write(bytes(response, "utf-8"))
 
