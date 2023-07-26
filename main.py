@@ -28,7 +28,7 @@ class MyServer(BaseHTTPRequestHandler):
         }
         self.send_response(200)
         self.send_header("Content-type", "text/html")
-        self.send_header("Access-Control-Allow-Origin", "http://frigo-full.coloc.djls.space:8080")
+        self.send_header("Access-Control-Allow-Origin", "http://justereseau.ca")
         self.end_headers()
         self.wfile.write(bytes(str(data), "utf-8"))
 
