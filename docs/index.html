@@ -37,9 +37,10 @@
 </style>
 
 <script>
-  current_url = new URL(window.location.href);
-  // target = "http://frigo-full:8001/"
-  target = "http://" + current_url.hostname + ":8001/"
+  // current_url = new URL(window.location.href);
+  // target = "http://" + current_url.hostname + ":8001/"
+
+  target = "http://frigo-full.coloc.djls.space:8001/"
 
   // Get the current power
   const request = new Request(target, { method: "GET" });
@@ -60,8 +61,7 @@
     console.error(error);
   });
 
-
-
+  // Set the power
   function setPower(power) {
     const request = new Request(target, { method: "POST", body: "{\"heater\": " + power + "}" });
     fetch(request).then((response) => {
