@@ -1,0 +1,64 @@
+# integrations:
+#   prometheus_remote_write:
+#   - basic_auth:
+#       password: glc_eyJvIjoiNjg2OTUxIiwibiI6ImlvdC1mcmlnby10b2tlbiIsImsiOiJ0azhJNzloVTU1M0FkMnlBNlpFRG9sOTAiLCJtIjp7InIiOiJ1cyJ9fQ==
+#       username: 519460
+#     url: https://prometheus-prod-10-prod-us-central-0.grafana.net/api/prom/push
+#   agent:
+#     enabled: true
+#     relabel_configs:
+#     - action: replace
+#       source_labels:
+#       - agent_hostname
+#       target_label: instance
+#     - action: replace
+#       target_label: job
+#       replacement: "integrations/agent-check"
+#     metric_relabel_configs:
+#     - action: keep
+#       regex: (prometheus_target_.*|prometheus_sd_discovered_targets|agent_build.*|agent_wal_samples_appended_total|process_start_time_seconds)
+#       source_labels:
+#       - __name__
+
+logs:
+  configs:
+  - clients:
+    - basic_auth:
+        password: glc_eyJvIjoiNjg2OTUxIiwibiI6ImlvdC1mcmlnby10b2tlbiIsImsiOiJ0azhJNzloVTU1M0FkMnlBNlpFRG9sOTAiLCJtIjp7InIiOiJ1cyJ9fQ==
+        username: 258700
+      url: https://logs-prod3.grafana.net/loki/api/v1/push
+    name: integrations
+    positions:
+      filename: /tmp/positions.yaml
+    scrape_configs:
+    - job_name: system
+      pipeline_stages:
+      - docker:
+      static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: syslog
+          instance: frigo-full
+          __path__: /var/log/syslog
+
+metrics:
+  global:
+    scrape_interval: 5s
+  wal_directory: /tmp/grafana-agent-wal
+  configs:
+  - name: integrations
+    remote_write:
+    - basic_auth:
+        password: glc_eyJvIjoiNjg2OTUxIiwibiI6ImlvdC1mcmlnby10b2tlbiIsImsiOiJ0azhJNzloVTU1M0FkMnlBNlpFRG9sOTAiLCJtIjp7InIiOiJ1cyJ9fQ==
+        username: 519460
+      url: https://prometheus-prod-10-prod-us-central-0.grafana.net/api/prom/push
+    scrape_configs:
+    - job_name: frigo
+      static_configs:
+      - targets:
+        - localhost:8000
+      relabel_configs:
+      - action: replace
+        target_label: instance
+        replacement: frigo-full

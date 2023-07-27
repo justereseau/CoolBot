@@ -1,4 +1,5 @@
-#!venv/bin/python
+#!/home/lmaurice/CoolBot/venv/bin/python
+
 import glob
 import threading
 from prometheus_client import Gauge, start_http_server
@@ -8,7 +9,7 @@ import subprocess
 
 
 HEATER_PIN = 13
-HEATER_INITIAL_VALUE = 20
+HEATER_INITIAL_VALUE = 30
 
 global sensor_values
 sensor_values = {}
@@ -58,7 +59,7 @@ class MyServer(BaseHTTPRequestHandler):
 
         self.send_response(200)
         self.send_header("Content-type", "text/html")
-        self.send_header("Access-Control-Allow-Origin", "http://frigo-full.coloc.djls.space:8080")
+        self.send_header("Access-Control-Allow-Origin", "http://justereseau.ca")
         self.end_headers()
         self.wfile.write(bytes(response, "utf-8"))
 

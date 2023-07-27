@@ -1,0 +1,8 @@
+[Unit]
+Description=CoolBot
+
+[Service]
+ExecStart=/home/lmaurice/CoolBot/main.py
+
+[Install]
+WantedBy=multi-user.target
