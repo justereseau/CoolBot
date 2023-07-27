@@ -11,11 +11,21 @@ import subprocess
 HEATER_PIN = 13
 HEATER_INITIAL_VALUE = 30
 
+INITIAL_VALUE_FILE = "/home/lmaurice/CoolBot/initial_values"
+
+# Read the initial value of the heater from INITIAL_VALUE_FILE
+try:
+    with open(INITIAL_VALUE_FILE, "r") as file:
+        HEATER_INITIAL_VALUE = int(file.read())
+except FileNotFoundError:
+    print("No initial_values file found, using default value of {}.".format(HEATER_INITIAL_VALUE))
+
 global sensor_values
 sensor_values = {}
 
 global heater_status
 heater_status = None
+
 
 # Manage the HTTP requests:
 class MyServer(BaseHTTPRequestHandler):
@@ -121,12 +131,15 @@ def sensor_subroutine():
             thread.join()
 
 
-# send the PWM value to the heater
+# send the PWM value to the heater then save it to a file
 def set_heater_state(state: int):
     global heater_status
     heater_status = state
     subprocess.run(["gpio", "-g", "pwm", str(HEATER_PIN), str(state)])
     prom_heater.set(state)
+    with open(INITIAL_VALUE_FILE, "w") as file:
+        file.write(str(state))
+
 
 # Setup the GPIO
 subprocess.run(["gpio", "-g", "mode", str(HEATER_PIN), "PWM"])
